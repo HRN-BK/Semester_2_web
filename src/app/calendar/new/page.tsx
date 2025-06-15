@@ -276,8 +276,8 @@ export default function NewCalendarPage() {
           }
 
           const startDate = new Date("2025-06-16")
-          const dayMapping = { "2": 1, "3": 2, "4": 3, "5": 4, "6": 5, "7": 6, "CN": 0 }
-          const dayOfWeek = dayMapping[item.day as keyof typeof dayMapping] || 1
+          const dayMapping = { "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "CN": 8 }
+          const dayOfWeek = dayMapping[item.day as keyof typeof dayMapping] || 2
 
           for (const week of item.weeks) {
             const weekOffset = (week - 25) * 7
@@ -297,6 +297,7 @@ export default function NewCalendarPage() {
             await supabase.from("schedules").insert({
               subject_id: subjectId,
               title: item.subjectName,
+              day: dayOfWeek,
               start_time: startTime.toISOString(),
               end_time: endTime.toISOString(),
               room: item.room,
@@ -380,8 +381,8 @@ export default function NewCalendarPage() {
       }
 
       const startDate = new Date("2025-06-16")
-      const dayMapping = { "2": 1, "3": 2, "4": 3, "5": 4, "6": 5, "7": 6, "CN": 0 }
-      const dayOfWeek = dayMapping[formData.day as keyof typeof dayMapping] || 1
+      const dayMapping = { "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "CN": 8 }
+      const dayOfWeek = dayMapping[formData.day as keyof typeof dayMapping] || 2
 
       for (let i = 0; i < formData.weeks.length; i++) {
         if (!formData.weeks[i]) continue
@@ -404,6 +405,7 @@ export default function NewCalendarPage() {
         await supabase.from("schedules").insert({
           subject_id: formData.subject_id,
           title: subject.name,
+          day: dayOfWeek,
           start_time: startTime.toISOString(),
           end_time: endTime.toISOString(),
           room: formData.room,

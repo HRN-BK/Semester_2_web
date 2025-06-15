@@ -73,6 +73,7 @@ create table public.schedules (
   campus text null,
   week_start integer null,
   week_end integer null,
+  tag_id uuid null references tags(id) on delete cascade,
   color text null,
   notes text null,
   created_at timestamp without time zone null default now(),
@@ -130,4 +131,39 @@ create table public.tasks (
   due_date text not null,
   created_at timestamp with time zone null default now(),
   constraint tasks_pkey primary key (id)
+) TABLESPACE pg_default;
+
+
+tags
+
+create table public.tags (
+  id uuid not null default extensions.uuid_generate_v4 (),
+  name text not null,
+  type text not null default 'manual',
+  color text not null,
+  is_active boolean not null default true,
+  created_at timestamp with time zone null default now(),
+  constraint tags_pkey primary key (id)
+) TABLESPACE pg_default;
+
+
+exams
+
+create table public.exams (
+  id uuid not null default extensions.uuid_generate_v4 (),
+  subject_id uuid references subjects(id) on delete cascade,
+  subject_code text not null,
+  subject_name text not null,
+  group_class text null,
+  exam_date date not null,
+  exam_type text not null,
+  campus text null,
+  room text null,
+  day_of_week integer null,
+  start_time text not null,
+  duration_minutes integer not null,
+  semester text not null,
+  tag_id uuid references tags(id) on delete cascade,
+  created_at timestamp with time zone null default now(),
+  constraint exams_pkey primary key (id)
 ) TABLESPACE pg_default;
