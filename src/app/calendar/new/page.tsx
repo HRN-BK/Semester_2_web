@@ -58,7 +58,8 @@ export default function NewCalendarPage() {
     endTime: "",
     room: "",
     campus: "BK-LTK",
-    weeks: Array(9).fill(false).map((_, i) => i + 25 < 34),
+    // Start with no weeks selected
+    weeks: Array(9).fill(false),
     tag_id: ""
   })
 
@@ -299,6 +300,7 @@ export default function NewCalendarPage() {
 
             await supabase.from("schedules").insert({
               subject_id: subjectId,
+              group_name: item.group,
               title: item.subjectName,
               day: dayOfWeek,
               start_time: startTime.toISOString(),
