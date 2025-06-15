@@ -73,29 +73,7 @@ export default function CalendarPage() {
 
         if (schedulesError) throw schedulesError
 
-        // Convert schedule times to 50-minute blocks starting from 6:00 AM
-        const formattedSchedules = schedulesData?.map(schedule => {
-          // Get the base date (using the schedule's date but with fixed times)
-          const baseDate = new Date(schedule.start_time.split('T')[0])
-          
-          // Calculate hours and minutes based on period number (1-12)
-          const periodNumber = schedule.period || 1
-          const startHour = 6 + Math.floor((periodNumber - 1) * 50 / 60)
-          const startMinute = ((periodNumber - 1) * 50) % 60
-          
-          // Set start time (6:00, 6:50, 7:40, etc.)
-          const startTime = new Date(baseDate)
-          startTime.setHours(startHour, startMinute, 0, 0)
-          
-          // End time is 50 minutes later
-          const endTime = new Date(startTime.getTime() + 50 * 60 * 1000)
-          
-          return {
-            ...schedule,
-            start_time: startTime.toISOString(),
-            end_time: endTime.toISOString()
-          }
-        }) || []
+        const formattedSchedules = schedulesData || []
 
         setSubjects(subjectsData || [])
         setSchedules(formattedSchedules)
@@ -266,7 +244,7 @@ export default function CalendarPage() {
           {daysInWeek.map((date, index) => {
             const daySchedules = schedules.filter((schedule) => {
               const scheduleDate = new Date(schedule.start_time)
-              return scheduleDate.getDay() === (date.getDay() + 6) % 7 + 1 // Adjust for week start on Monday
+              return scheduleDate.getDay() === date.getDay()
             })
 
             return (
