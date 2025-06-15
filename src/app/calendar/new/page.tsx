@@ -58,7 +58,8 @@ export default function NewCalendarPage() {
     endTime: "",
     room: "",
     campus: "BK-LTK",
-    weeks: Array(9).fill(false).map((_, i) => i + 25 < 34),
+    // Start with no weeks selected
+    weeks: Array(9).fill(false),
     tag_id: ""
   })
 
@@ -159,7 +160,10 @@ export default function NewCalendarPage() {
         if (!match) continue
 
         const [, semester, subjectCode, subjectName, credits, tuitionCredits, group, day, , time, room, campus, weekPattern] = match
-        const weeks = weekPattern.split('|').map((w, index) => w.trim() && w !== '--' ? index + 1 : null).filter(w => w !== null)
+        const weeks = weekPattern
+          .split('|')
+          .map((w, index) => (w.trim() && w !== '--' ? index + 25 : null))
+          .filter((w) => w !== null)
         if (weeks.length === 0 || !day || !time) continue
 
         const timeMatch = time.match(/([\d:]+)\s*-\s*([\d:]+)/)
@@ -296,6 +300,7 @@ export default function NewCalendarPage() {
 
             await supabase.from("schedules").insert({
               subject_id: subjectId,
+              group_name: item.group,
               title: item.subjectName,
               start_time: startTime.toISOString(),
               end_time: endTime.toISOString(),
