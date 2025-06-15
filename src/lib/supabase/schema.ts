@@ -42,6 +42,41 @@ export interface Schedule {
 }
 
 /**
+ * Tags table
+ * Categorises schedules and exams
+ */
+export interface Tag {
+  id: string
+  name: string
+  type: string
+  color: string
+  is_active: boolean
+  created_at: string
+}
+
+/**
+ * Exams table
+ * Stores exam schedules
+ */
+export interface Exam {
+  id: string
+  subject_id: string | null
+  subject_code: string
+  subject_name: string
+  group_class: string | null
+  exam_date: string
+  exam_type: string
+  campus: string | null
+  room: string | null
+  day_of_week: number | null
+  start_time: string
+  duration_minutes: number | null
+  semester: string
+  tag_id: string | null
+  created_at: string
+}
+
+/**
  * Notes table
  * Stores study notes related to specific lessons
  */
@@ -100,6 +135,8 @@ export interface DatabaseTables {
   notes: Note
   lessons: Lesson
   tasks: Task
+  tags: Tag
+  exams: Exam
 }
 
 /**

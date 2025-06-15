@@ -73,6 +73,7 @@ create table public.schedules (
   campus text null,
   week_start integer null,
   week_end integer null,
+  tag_id uuid null,
   color text null,
   notes text null,
   created_at timestamp without time zone null default now(),
@@ -80,6 +81,7 @@ create table public.schedules (
 ) TABLESPACE pg_default;
 
 create index IF not exists idx_schedules_day_week on public.schedules using btree (day, week_start, week_end) TABLESPACE pg_default;
+create index IF not exists idx_schedules_tag on public.schedules using btree (tag_id) TABLESPACE pg_default;
 
 
 
@@ -131,3 +133,41 @@ create table public.tasks (
   created_at timestamp with time zone null default now(),
   constraint tasks_pkey primary key (id)
 ) TABLESPACE pg_default;
+
+
+Tags
+
+create table public.tags (
+  id uuid not null default gen_random_uuid (),
+  name text not null,
+  type text not null,
+  color text not null,
+  is_active boolean not null default true,
+  created_at timestamp with time zone null default now(),
+  constraint tags_pkey primary key (id)
+) TABLESPACE pg_default;
+
+
+Exams
+
+create table public.exams (
+  id uuid not null default gen_random_uuid (),
+  subject_id uuid null,
+  subject_code text not null,
+  subject_name text not null,
+  group_class text null,
+  exam_date text not null,
+  exam_type text not null,
+  campus text null,
+  room text null,
+  day_of_week integer null,
+  start_time text not null,
+  duration_minutes integer null,
+  semester text not null,
+  tag_id uuid null,
+  created_at timestamp with time zone null default now(),
+  constraint exams_pkey primary key (id),
+  constraint exams_subject_id_fkey foreign key (subject_id) references subjects (id) on delete cascade
+) TABLESPACE pg_default;
+
+create index IF not exists idx_exams_tag on public.exams using btree (tag_id) TABLESPACE pg_default;
