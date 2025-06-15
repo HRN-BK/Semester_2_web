@@ -32,6 +32,7 @@ export interface Schedule {
   end_time: string
   room: string
   campus: string
+  day: number
   week_start: number
   week_end: number
   semester: string  // e.g., "20243" for 2024-2025 semester 3
@@ -39,6 +40,41 @@ export interface Schedule {
   color?: string
   created_at: string
   updated_at: string
+}
+
+/**
+ * Tags table
+ * Allow grouping schedules and exams
+ */
+export interface Tag {
+  id: string
+  name: string
+  type: string
+  color: string
+  is_active: boolean
+  created_at: string
+}
+
+/**
+ * Exams table
+ * Stores exam schedules
+ */
+export interface Exam {
+  id: string
+  subject_id: string
+  subject_code: string
+  subject_name: string
+  group_class: string
+  exam_date: string
+  exam_type: string
+  campus: string
+  room: string
+  day_of_week: number
+  start_time: string
+  duration_minutes: number
+  semester: string
+  tag_id: string
+  created_at: string
 }
 
 /**
@@ -97,6 +133,8 @@ export interface Task {
 export interface DatabaseTables {
   subjects: Subject
   schedules: Schedule
+  exams: Exam
+  tags: Tag
   notes: Note
   lessons: Lesson
   tasks: Task
