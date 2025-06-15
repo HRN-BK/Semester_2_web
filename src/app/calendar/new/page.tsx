@@ -159,7 +159,10 @@ export default function NewCalendarPage() {
         if (!match) continue
 
         const [, semester, subjectCode, subjectName, credits, tuitionCredits, group, day, , time, room, campus, weekPattern] = match
-        const weeks = weekPattern.split('|').map((w, index) => w.trim() && w !== '--' ? index + 1 : null).filter(w => w !== null)
+        const weeks = weekPattern
+          .split('|')
+          .map((w, index) => (w.trim() && w !== '--' ? index + 25 : null))
+          .filter((w) => w !== null)
         if (weeks.length === 0 || !day || !time) continue
 
         const timeMatch = time.match(/([\d:]+)\s*-\s*([\d:]+)/)
